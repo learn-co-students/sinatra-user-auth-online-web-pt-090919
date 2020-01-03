@@ -1,4 +1,4 @@
-# User Authentication in Sinatra
+rake db:migrate SINATRA_ENV=test# User Authentication in Sinatra
 
 ## Overview
 
