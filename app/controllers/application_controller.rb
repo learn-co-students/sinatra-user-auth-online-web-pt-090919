@@ -12,15 +12,19 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/registrations/signup' do
-
+    # Render sign up form
     erb :'/registrations/signup'
   end
 
   post '/registrations' do
-    @user = User.new(name: params["name"], email: params["email"], password: params["password"])
+    # Handle post request 
+    # Gets new user's info from params hash
+    # Creates new user, signs them in, redirects
+    @user = User.new(name: params[:user]["name"], email: params[:user]["email"], password: params[:user]["password"])
     @user.save
+    # Sign user in
     session[:user_id] = @user.id
-
+    
     redirect '/users/home'
   end
 
@@ -31,21 +35,24 @@ class ApplicationController < Sinatra::Base
   end
 
   post '/sessions' do
-    @user = User.find_by(email: params[:email], password: params[:password])
+    @user = User.find_by(email: params[:user][:email], password: params[:user][:password])
     if @user
       session[:user_id] = @user.id
+      # puts params
       redirect '/users/home'
     end
     redirect '/sessions/login'
   end
 
   get '/sessions/logout' do
+    # Logging the user out by clearing the session hash
     session.clear
     redirect '/'
   end
 
   get '/users/home' do
-
+    # Rendering the user's homepage view
+    # Finds the current user based on ID value stored in session hash
     @user = User.find(session[:user_id])
     erb :'/users/home'
   end
